@@ -1,0 +1,40 @@
+<%- include('./layouts/layout') -%>
+
+<div class="container">
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Edit</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% Users.forEach(userdata => { %>
+            <tr>
+                <td><%= userdata.name %></td>
+                <td><%= userdata.email %></td>
+                <td><%= userdata.role %></td>
+                <td><a class="btn btn-primary" href="#">Update</a></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $('#myTable').DataTable({
+        responsive: true,
+        fixedHeader: true,
+        fixedColumns: true,
+        layout: {
+            topStart: {
+                buttons: [
+                    'copy', 'excel', 'pdf'
+                ]
+            }
+        }
+    });
+</script>

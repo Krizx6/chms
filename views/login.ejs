@@ -1,0 +1,25 @@
+<%- include('./layouts/layout') -%>
+<% if(msg) {%>
+    <p class="alert alert-danger mx-3 text-center  alert-dismissible fade show ">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <%= msg %>
+    </p>
+<% } %>
+
+<div class="container d-flex justify-content-evenly">
+    <div class="card p-2  col-lg-6  col-10 mt-4">
+        <div class="card-title text-center">
+            <h2 class="card-title">Login</h2>
+        </div>
+        <% if (errors.length > 0) {%>
+            <% errors.forEach(error => { %>
+                <p class="text-danger" ><%= error.msg %></p>
+            <%})%>
+        <% } %>
+        <form action="/auth/login" method="POST">
+        <input type="email" class="form-control mx-1 mt-2" name="email" placeholder="Email"  />
+        <input type="password" class="form-control mx-1 mt-2" name="password" placeholder="Password"  />
+        <button type="submit" class="btn btn-success w-100 mx-1 mt-2" >Login</button>
+        </form>
+    </div>
+</div>

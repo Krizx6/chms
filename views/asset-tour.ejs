@@ -1,0 +1,61 @@
+<%- include('./layouts/layout') -%>
+
+<!-- Load Calcite components from CDN -->
+<script 
+  type="module" 
+  src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js">
+</script>
+
+<!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+<link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
+<script src="https://js.arcgis.com/4.32/"></script>
+
+<!-- Load Map components from CDN-->
+<script
+  type="module"
+  src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js">
+</script>
+
+<div class="container ">
+  <p class="">Virtual touring <%= asset.name %></p>
+  <% if (asset.filepath ) { %>
+    <% if (asset.category=== "other") { %>
+      <div class="h-50">
+        <model-viewer style="height: 500px; margin-top: 5px;" class="col-12 mx-auto "  
+        alt="" 
+        src="<%= asset.filepath %>" 
+        ar environment-image="" 
+        poster="../uploads/download.jpg" 
+        shadow-intensity="1" 
+        camera-controls 
+        touch-action="pan-y">
+
+        </model-viewer>
+      </div>
+    <% }%>
+  <%}%>
+
+  <%if(asset.category=== "site" && asset.long && asset.lat){%>
+    <div style="height: 500px; margin-top: 5px;">
+      <arcgis-scene basemap="hybrid"
+                    camera-position="<%= asset.long %>, <%= asset.lat %>, 1020" 
+                    camera-tilt="57" 
+                    camera-heading="0">
+        <arcgis-zoom position="top-left">
+
+        </arcgis-zoom>
+      </arcgis-scene>
+    </div>
+  <% }%>
+  <%if(!asset.filepath && !asset.lat && !asset.long){%>
+    <div class=" px-5 text-center">
+      <h2>No tours for <%= asset.name %></h2>
+      <p class="alert alert-info">Virtual tour <%= asset.name %> coming soon</p>
+    </div>
+  <%}%>
+
+
+
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js">
+
+</script>

@@ -1,0 +1,31 @@
+<%- include('./layouts/layout') -%>
+<div class="container-fluid">
+<div class="mx-1 mx-auto justify-content-center mx-lg-4">
+  <div class="card  mx-lg-4   ">
+    <div class="card-header">
+      <h2><%= asset.name %></h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Category:</strong> <%= asset.category %></p>
+      <p><strong>Location:</strong> <%= asset.location %></p>
+      <iframe src="https://www.google.com/maps?q=<%= asset.location %>&output=embed" class="w-100" height="300"></iframe>
+      <a href="/assets/delete/<%= asset._id %>" class="btn btn-danger">Dicard</a>
+      <a href="/assets" class="btn btn-outline-secondary ">Back to all Assets</a>
+      <div class="accordion mt-4" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <strong>Description:</strong>
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse " data-bs-parent="#accordionExample">
+            <div class="accordion-body ">
+              <p id="description"><%- asset.description %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

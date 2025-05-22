@@ -1,0 +1,32 @@
+<%- include('./layouts/layout') -%>
+
+<div class="container  d-flex justify-content-evenly mt-4">
+  <div class="card p-2 mx-3 col-lg-6 col-10">
+    <h2 class="text-center">Sign Up</h2>
+    <% if (errors.length > 0) {%>
+      <% errors.forEach(error => { %>
+          <p class="text-danger" ><%= error.msg %></p>
+      <%})%>
+    <% } %>
+    <form action="/auth/register" method="POST">
+      <div class="mb-3">
+        <input type="text" class="form-control " name="name" placeholder="Name"  />
+      </div>
+      <div class="mb-3">
+        <input type="email" class="form-control" name="email" placeholder="Email"  />
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Password" />
+      </div>
+      <div class="mb-3">
+        <select name="role" id="" class="form-control">
+          <option value="">select Role</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Sign Up</button>
+    </form>
+  </div>
+  
+</div>

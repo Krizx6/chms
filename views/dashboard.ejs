@@ -1,0 +1,49 @@
+<%- include('./layouts/layout') -%>
+<% if(msg) {%>
+  <p class="alert alert-success mx-3 text-center alert-dismissible fade show">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     <%= user.name %>, <%= msg %>
+  </p>
+<% } %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card m-3">
+      <div class="card-header">
+        <h3 class="card-title text-center">Recent added Site</h3>
+      </div>
+      <div class="card-body">
+        <% recentAssets.forEach(site => {%>
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <strong><p><%= site.name %></p></strong>
+          </button>
+          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <p>Category: <%= site.category %></p>
+              <p>Description: <%- site.description %></p>
+              <p>Added on: <%= site.createdAt.toLocaleString() %></p>
+              <p>Location: <%= site.location %></p>
+            </div>
+          </div>
+            
+        <%}); %>
+      </div>
+      <div class="card-footer">
+        <a href="/assets" class="btn btn-outline-primary mx-3">View all Sites</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card text-center p-3 m-3">
+      <h3>Total Users</h3>
+      <p><%= users %></p>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card text-center p-3 m-3">
+      <h3>Total Sites</h3>
+      <p><%= assets %></p>
+    </div>
+  </div>
+</div>
+<a href="/auth/logout" class="btn btn-danger mx-3">Logout</a>
