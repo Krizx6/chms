@@ -1,0 +1,97 @@
+<%- include('./layouts/layout') -%>
+<div class="progress mb-3" style="height: 25px;">
+
+</div>
+<div class="container mt-4">
+  <h2 class="text-center">Update <%=asset.name%></h2>
+
+
+<% if(msg.length>0) {%>
+  <p class="alert alert-warning mx-3 text-center alert-dismissible fade show">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     <%= msg %>
+  </p>
+<% } %>
+
+
+  <form action="/assets/update/<%=asset._id%>" method="POST" id="aform" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="name" class="form-label">Asset Name</label>
+      <input type="text" class="form-control" id="name" name="name" value="<%=asset.name%>" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <select name="category" id="category" class="form-control" oninput="detectInput()">
+          <option value="">select category</option>
+          <option value="site">Site</option>
+          <option value="other">Others</option>
+          <option value="non">no category</option>
+        </select>
+    </div>
+
+    <div class="mb-3" >
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input type="text" class="form-control" id="location" name="location" required>
+    </div>
+
+    <div class="mb-3 d-inline">
+      <label for="lat" class="form-label">Latitude</label>
+      <input type="number" class="form-control" id="lat" name="lat" step="any">
+
+      <label for="long" class="form-label">Longitude</label>
+      <input type="number" class="form-control" id="long" name="long" step="any">
+    </div>
+
+    <div class="mb-3">
+      <label for="file" class="form-label">3D file</label>
+      <input type="file" class="form-control" id="file" name="3d_file" >
+    </div>
+
+
+    <button type="submit" class="btn btn-primary" id="btnSubmit">Update</button>
+  </form>
+</div>
+
+<script>
+  function detectInput (){
+    const category = $("#category");
+    console.log(category.value);
+  }
+
+  $('#description').summernote({
+    placeholder: 'Description of the site',
+    tabsize: 3,
+    height: 200,
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['table', ['table']],
+      ['insert', ['link', 'picture', 'video']],
+      ['view', ['fullscreen', 'codeview', 'help']]
+    ]
+  });
+
+  //ajax form submit
+  // $('#btnSubmit').click((e)=>{
+  //   e.preventDefault();
+
+  //   var form = $('#aform');
+
+  //   $.ajax({
+  //     url:"/assets/add",
+  //     data: $(form).serialize(),
+  //     method: "POST"
+      
+  //   }).done((response)=>{
+  //     var data = JSON.parse(response);
+  //   })
+  // })
+</script>

@@ -70,6 +70,11 @@ exports.addAsset = async (req, res) => {
   res.redirect('/assets');
 };
 
+exports.getAssetUdate = async(req, res)=>{
+  const asset = await Asset.findById(req.params.id);
+  res.render('update-asset', {asset, title:'asset update',user: req.user, msg:"" });
+}
+
 exports.updateAsset = async (req, res) => {
   const { name, category, description, location } = req.body;
   await Asset.findByIdAndUpdate(req.params.id, { name, category, description, location });

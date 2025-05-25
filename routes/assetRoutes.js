@@ -38,6 +38,9 @@ upload = multer({
     }
 })
 
+
+router.get('/update/:id',assetController.getAssetUdate);
+router.post('/update/:id',assetController.updateAsset);
 // route
 router.get('/suggest', assetController.suggestAssets);
 
