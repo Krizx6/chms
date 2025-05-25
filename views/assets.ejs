@@ -5,8 +5,25 @@
      <%= msg %>
   </p>
 <% } %>
+  <%if(user.role==="user" || !user.role){%>
+    <div class="row sticky-top">
+    <div class="col-md-12 mb-2 ">
+      <div class="d-flex justify-content-between align-items-center breaking-news bg-white">
+        <div class="d-flex flex-row flex-grow-1 flex-fill justify-content-center bg-info py-2 text-white px-1 news">
+          <span class="d-flex align-items-center px-3">&nbsp;Update</span>
+        </div>
+        <marquee class="news-scroll" behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();"> 
+          <p class="">No news at the moment</p>
+        </marquee>
+      </div>
+    </div>
+</div>
+<%}%>
+
 <h2 class="text-center">All sites added</h2>
 <hr>
+
+
 <form action="/assets/search" class="d-inline-flex" method="GET">
   <input type="text" id="search" name="search" placeholder="Search..." class="form-control mx-3" />
   <button type="submit" class="btn btn-primary ">Search</button>
@@ -16,6 +33,45 @@
 <%if(user.role==="admin"){%>
   <a href="/assets/add" class="btn btn-outline-secondary ms-2 float-right">Add asset</a>
 <%}%>
+
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentModalLabel">Donation Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <form id="paymentForm">
+          <div class="mb-3">
+            <label for="cardName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="cardName" required>
+          </div>
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="text" class="form-control" id="amount" required>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="PaymentMethod" class="form-label">Payment Method</label>
+              <input type="text" class="form-control" id="PaymentMethod" placeholder="MTN or Airtel" disabled>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="note" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="note">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Donate</button>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
 
 <div class="row mx-1 mt-3 ">
   <% assets.forEach(asset => { %>
@@ -33,14 +89,95 @@
           <%if(user.role==="admin"){%>
             <a href="/assets/delete/<%= asset._id %>" class="btn btn-danger mt-2">Dicard</a>
             <a href="/assets/update/<%= asset._id %>" class="btn btn-outline-primary mt-2">Update Details</a>
-          <%}%>
-          <a href="/assets/tour/<%= asset._id %>" class="btn btn-outline-secondary mt-2">Tour</a>
+          <%}else{%>
+          <button onclick="sharePage()" class="btn btn-outline-primary mt-2">share 
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+              <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+            </svg>
+          </button>
+          <button type="button"  data-bs-toggle="modal" data-bs-target="#paymentModal" class="btn btn-success mt-2"> 
+            Donate
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+            </svg>
+          </button>
+            <%}%>
+
+          <a href="/assets/tour/<%= asset._id %>" class="btn btn-outline-secondary mt-2">Tour
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-badge-3d" viewBox="0 0 16 16">
+              <path d="M4.52 8.368h.664c.646 0 1.055.378 1.06.9.008.537-.427.919-1.086.919-.598-.004-1.037-.325-1.068-.756H3c.03.914.791 1.688 2.153 1.688 1.24 0 2.285-.66 2.272-1.798-.013-.953-.747-1.38-1.292-1.432v-.062c.44-.07 1.125-.527 1.108-1.375-.013-.906-.8-1.57-2.053-1.565-1.31.005-2.043.734-2.074 1.67h1.103c.022-.391.383-.751.936-.751.532 0 .928.33.928.813.004.479-.383.835-.928.835h-.632v.914zm3.606-3.367V11h2.189C12.125 11 13 9.893 13 7.985c0-1.894-.861-2.984-2.685-2.984zm1.187.967h.844c1.112 0 1.621.686 1.621 2.04 0 1.353-.505 2.02-1.621 2.02h-.844z"/>
+              <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+            </svg>
+          </a>
+
         </div>
       </div>
     </div>
   <% }) %>
 
   <script>
+    //payment modal
+    document.getElementById('paymentForm')
+    .addEventListener('submit', 
+      function (e) {
+        e.preventDefault(); // prevent real submission
+
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your donation was sent, thanks for the support.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          location.reload(); // refresh the page
+        });
+      }
+    );
+    //     $(document).ready(function () {
+    //   $('#paymentForm').on('submit', function (e) {
+    //     e.preventDefault(); // Prevent default form submission
+
+    //     // Collect form data
+    //     var formData = {
+    //       cardName: $('#Name').val(),
+    //       cardNumber: $('#Amount').val(),
+    //       expiryDate: $('#PaymentMethod').val(),
+    //       cvv: $('#note').val()
+    //     };
+
+    //     // AJAX POST to /donation
+    //     $.ajax({
+    //       type: 'POST',
+    //       url: '#',
+    //       data: JSON.stringify(formData),
+    //       contentType: 'application/json',
+    //       success: function (response) {
+    //         $('#paymentModal').modal('hide'); // Hide the modal
+    //         Swal.fire('Success!', 'Donation was successful.', 'success');
+    //       },
+    //       error: function (xhr) {
+    //         Swal.fire('Error!', 'Payment failed. Please try again.', 'error');
+    //       }
+    //     });
+    //   });
+    // });
+
+    //Sharing functionality
+    function sharePage(){
+      if(navigator.share){
+        navigator.share({
+          title: document.title,
+          text: "check this out",
+          url:window.location.href
+        }).then(()=>{})
+        .catch(((error)=>{console.error("error sharing")}));
+      }else{
+        alert("error sharing")
+      }
+    }
+
+
+    //searching suggestion
     const searchInput = document.getElementById('search');
     const suggestionsBox = document.getElementById('suggestions');
   
