@@ -49,6 +49,7 @@
           <% if (user) { %>
 
             <% if(user.role === 'admin') {%>
+              <li class="nav-item"><a class="nav-link" href="#">Campaigns</a></li>
               <li class="nav-item"><a class="nav-link" href="/users/allusers">Manage Users</a></li>
               <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Admin Dashboard</a></li>
             <% }else if(user.role === 'user'){%>

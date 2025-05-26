@@ -35,46 +35,48 @@
 <%}%>
 
 
-<!-- Payment Modal -->
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    
-      <div class="modal-header">
-        <h5 class="modal-title" id="paymentModalLabel">Donation Form</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      
-      <div class="modal-body">
-        <form id="paymentForm">
-          <div class="mb-3">
-            <label for="cardName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="cardName" required>
-          </div>
-          <div class="mb-3">
-            <label for="amount" class="form-label">Amount</label>
-            <input type="text" class="form-control" id="amount" required>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="PaymentMethod" class="form-label">Payment Method</label>
-              <input type="text" class="form-control" id="PaymentMethod" placeholder="MTN or Airtel" disabled>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="note" class="form-label">Phone Number</label>
-              <input type="text" class="form-control" id="note">
-            </div>
-          </div>
-          <button type="submit" class="btn btn-success w-100">Donate</button>
-        </form>
-      </div>
-      
-    </div>
-  </div>
-</div>
 
 <div class="row mx-1 mt-3 ">
   <% assets.forEach(asset => { %>
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        
+          <div class="modal-header">
+            <h5 class="modal-title" id="paymentModalLabel">Donation Form </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body">
+            <form id="paymentForm">
+              <div class="mb-3">
+                <label for="cardName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="cardName" required>
+              </div>
+              <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <input type="text" class="form-control" id="amount" required>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="PaymentMethod" class="form-label">Payment Method</label>
+                  <input type="text" class="form-control" id="PaymentMethod" placeholder="MTN or Airtel" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="note" class="form-label">Phone Number</label>
+                  <input type="text" class="form-control" id="note">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success w-100">Donate</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- asset card -->
     <div class="col-md-4">
       <div class="card mb-3">
         <div class="card-header text-center">

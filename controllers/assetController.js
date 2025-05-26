@@ -5,7 +5,7 @@ const Asset = require('../models/Asset');
 exports.getAssets = async (req, res) => {
   const assets = await Asset.find().sort({ createdAt: -1 });
   const user = req.user
-  res.render('assets', { assets,title:'assets', user, msg: req.flash('success_msg') });
+  res.render('assets', { assets,title:'assets', user, msg: req.flash('success_msg')});
 };
 
 exports.addAsset = async (req, res) => {
