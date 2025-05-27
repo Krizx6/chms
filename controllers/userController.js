@@ -25,5 +25,5 @@ exports.changePassword = async (req, res) => {
   
   exports.getUsers = async(req, res)=>{
     let Users = await User.find();
-    res.render('users',{title:'users', user: req.user, Users });
+    res.render('users',{title:'chms users', user: req.user, Users });
   }

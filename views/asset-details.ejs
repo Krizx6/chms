@@ -13,9 +13,9 @@
       <a href="/assets" class="btn btn-outline-secondary ">Back to all Assets</a>
 
       <%if(user.role == "user"){%>
-        <form >
+        <form id="userComment">
           <div class="input-group my-3">
-          <input type="text" class="form-control" id="user" placeholder="Leave a comment" aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <input type="text" class="form-control" id="comment" placeholder="Leave a comment" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="submit" id="send">Send
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
@@ -45,16 +45,40 @@
   </div>
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 <script>
-  $("#send").click((e)=>{
-    Swal.fire({
-      showConfirmButton: false,
-      text: 'Thanks for the feedback.',
-      timer:1000
-      }).then(() => {
-        $("#user").value()="";
-      //location.reload(); // refresh the page
+
+  $(document).ready(function () {
+      $('#userComment').on('submit', function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Collect form data
+        var formData = {
+          Name: $('#comment').val()
+        };
+
+        // AJAX POST to /donation
+        $.ajax({
+          type: 'POST',
+          url: '/donation',
+          data: JSON.stringify(formData),
+          contentType: 'application/json',
+          success: function (response) {
+            $('#userComment')[0].reset();
+            Swal.fire({
+              showConfirmButton: false,
+              text: 'Thanks for the feedback.',
+              timer:1000
+              }).then(() => {
+              //location.reload(); // refresh the page
+            });
+            
+          },
+          error: function (xhr) {
+            Swal.fire('Error!', 'comment problem', 'error');
+          }
+        });
+      });
     });
-    
-  })
 </script>

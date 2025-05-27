@@ -27,7 +27,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 //middleware
 app.use('/public', express.static('public'));
-app.use('/uploads', express.static('uploads'));
+app.use(express.json());
+//app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(session({
   secret: 'secret',
@@ -51,6 +52,11 @@ app.use('/assets', require('./routes/assetRoutes'));
 app.use('/users', require('./routes/userRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
 app.use('/dashboard', require('./routes/dashboardRoutes'));
+app.post("/donation", (req, res)=>{
+  res.redirect("/assets");
+ return console.log( req.body);
+
+});
 
 app.use('/', (req,res, next)=>{
   res.status(404).send(
