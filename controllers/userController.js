@@ -20,10 +20,42 @@ exports.changePassword = async (req, res) => {
 
     req.flash('success_msg', 'Password changed successfully!');
     res.redirect('/dashboard');
-  }
-
+}
   
-  exports.getUsers = async(req, res)=>{
-    let Users = await User.find();
-    res.render('users',{title:'chms users', user: req.user, Users });
+exports.getUsers = async(req, res)=>{
+  let Users = await User.find();
+  res.render('users',{title:'chms users', user: req.user, Users });
+}
+
+// exports.updateUserRole = async(req, res)=>{
+//   await User.findByIdAndUpdate(req.params.id,{role:req.body.role});
+  
+//   //res.render('users',{title:'chms users', user: req.user, Users });
+// }
+exports.updateUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    // Optional: Validate role
+    const validRoles = ['user', 'admin'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).send('Invalid role selected');
+    }
+
+    const user = await User.findByIdAndUpdate(id, { role }, { new: true });
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Redirect or respond based on your frontend
+    res.redirect('/users/allusers'); // Or send a success message
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
   }
+};
+
+
+

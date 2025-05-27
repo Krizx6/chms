@@ -1,27 +1,56 @@
 <%- include('./layouts/layout') -%>
 
-<div class="container-fluid w-100">
-    <table id="myTable" class="display w-100" >
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Edit</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            <% Users.forEach(userdata => { %>
+<div class="container-fluid ">
+
+<table id="myTable" class="display w-100" >
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th id="edit" >Edit</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <% Users.forEach(userdata => { %>
+            <!-- Unique Modal for Each User -->
+            <div class="modal fade" id="campaignModal-<%= userdata._id %>" tabindex="-1" aria-labelledby="campaignModalLabel-<%= userdata._id %>" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="/users/update-user-role/<%= userdata._id %>" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="campaignModalLabel-<%= userdata._id %>">Update <%= userdata.name %>'s role</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="roleSelect-<%= userdata._id %>" class="form-label">Role</label>
+                                    <select name="role" id="roleSelect-<%= userdata._id %>" class="form-control">
+                                        <option value="user" <%= userdata.role === 'user' ? 'selected' : '' %>>User</option>
+                                        <option value="admin" <%= userdata.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Row -->
             <tr>
                 <td><%= userdata.name %></td>
                 <td><%= userdata.email %></td>
                 <td><%= userdata.role %></td>
-                <td><a class="btn btn-primary" href="#">Update</a></td>
+                <td>
+                    <a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#campaignModal-<%= userdata._id %>">Update</a>
+                </td>
             </tr>
-            <% }) %>
-        </tbody>
-    </table>
+        <% }) %>
+
+    </tbody>
+</table>
 </div>
 
 <script>
