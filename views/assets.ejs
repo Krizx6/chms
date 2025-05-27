@@ -38,100 +38,105 @@
 
 <div class="row mx-1 mt-3 ">
   <% assets.forEach(asset => { %>
-    <!-- Payment Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-        
-          <div class="modal-header">
-            <h5 class="modal-title" id="paymentModalLabel">Donation Form </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          
-          <div class="modal-body">
-            <form id="paymentForm">
-              <div class="mb-3">
-                <label for="Name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="Name" required>
-              </div>
-              <div class="mb-3">
-                <label for="amount" class="form-label">Amount</label>
-                <input type="number" class="form-control" id="amount" required>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label for="PaymentMethod" class="form-label">Payment Method</label>
-                  <input type="text" class="form-control" id="PaymentMethod" placeholder="MTN or Airtel">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label for="phone" class="form-label">Phone Number</label>
-                  <input type="number" class="form-control" id="Phone" required>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-success w-100">Donate</button>
-            </form>
-          </div>
-          
+  <!-- Unique Payment Modal for each asset -->
+  <div class="modal fade paymentModal" id="paymentModal-<%= asset._id %>" tabindex="-1" aria-labelledby="paymentModalLabel-<%= asset._id %>" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentModalLabel-<%= asset._id %>">Donation for <%= asset.name %></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        
+        <div class="modal-body">
+          <form id="paymentForm-<%= asset._id %>" class="paymentForm">
+            <div class="mb-3">
+              <label for="Name-<%= asset._id %>" class="form-label">Name</label>
+              <input type="text" name="name" class="form-control name" id="Name-<%= asset._id %>" required>
+            </div>
+            <div class="mb-3">
+              <label for="amount-<%= asset._id %>" class="form-label">Amount</label>
+              <input type="number" name="amount" class="form-control amount" id="amount-<%= asset._id %>" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="PaymentMethod-<%= asset._id %>" class="form-label">Payment Method</label>
+                <input type="text" name="paymentMethod" class="form-control paymentMethod" id="PaymentMethod-<%= asset._id %>" placeholder="MTN or Airtel">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="Phone-<%= asset._id %>" class="form-label">Phone Number</label>
+                <input type="number" name="phone" class="form-control phone" id="Phone-<%= asset._id %>" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Donate</button>
+          </form>
+        </div>
+
       </div>
     </div>
+  </div>
 
-    <!-- asset card -->
-    <div class="col-md-4">
-      <div class="card mb-3">
-        <div class="card-header text-center">
-          <h5 class="card-title"><%= asset.name %></h5>
-        </div>
-        <div class="card-body">
-          <p class="card-text"><strong>Category:</strong> <%= asset.category %></p>
-          <p class="card-text"><strong>Date added:</strong> <%= asset.createdAt.toLocaleString() %></p>
-          <p class="card-text"><strong>Location:</strong> <%= asset.location %></p>
-          <iframe src="https://www.google.com/maps?q=<%= asset.location %>&output=embed" class="w-100" height="200"></iframe>
-          <a href="/assets/<%= asset._id %>" class="btn btn-primary mt-2">More Details</a>
-          <%if(user.role==="admin"){%>
-            <a href="/assets/delete/<%= asset._id %>" class="btn btn-danger mt-2">Dicard</a>
-            <a href="/assets/update/<%= asset._id %>" class="btn btn-outline-primary mt-2">Update Details</a>
-          <%}else{%>
-          <button onclick="sharePage()" class="btn btn-outline-primary mt-2">share 
+  <!-- Asset Card -->
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-header text-center">
+        <h5 class="card-title"><%= asset.name %></h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text"><strong>Category:</strong> <%= asset.category %></p>
+        <p class="card-text"><strong>Date added:</strong> <%= asset.createdAt.toLocaleString() %></p>
+        <p class="card-text"><strong>Location:</strong> <%= asset.location %></p>
+        <iframe src="https://www.google.com/maps?q=<%= asset.location %>&output=embed" class="w-100" height="200"></iframe>
+
+        <a href="/assets/<%= asset._id %>" class="btn btn-primary mt-2">More Details</a>
+
+        <% if(user.role === "admin") { %>
+          <a href="/assets/delete/<%= asset._id %>" class="btn btn-danger mt-2">Discard</a>
+          <a href="/assets/update/<%= asset._id %>" class="btn btn-outline-primary mt-2">Update Details</a>
+        <% } else { %>
+          <button onclick="sharePage()" class="btn btn-outline-primary mt-2">
+            Share
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
               <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
             </svg>
           </button>
-          <button type="button"  data-bs-toggle="modal" data-bs-target="#paymentModal" class="btn btn-success mt-2"> 
+
+          <button type="button" data-bs-toggle="modal" data-bs-target="#paymentModal-<%= asset._id %>" class="btn btn-success mt-2">
             Donate
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
-                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+              <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+              <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
             </svg>
           </button>
-            <%}%>
+        <% } %>
 
-          <a href="/assets/tour/<%= asset._id %>" class="btn btn-outline-secondary mt-2">Tour
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-badge-3d" viewBox="0 0 16 16">
-              <path d="M4.52 8.368h.664c.646 0 1.055.378 1.06.9.008.537-.427.919-1.086.919-.598-.004-1.037-.325-1.068-.756H3c.03.914.791 1.688 2.153 1.688 1.24 0 2.285-.66 2.272-1.798-.013-.953-.747-1.38-1.292-1.432v-.062c.44-.07 1.125-.527 1.108-1.375-.013-.906-.8-1.57-2.053-1.565-1.31.005-2.043.734-2.074 1.67h1.103c.022-.391.383-.751.936-.751.532 0 .928.33.928.813.004.479-.383.835-.928.835h-.632v.914zm3.606-3.367V11h2.189C12.125 11 13 9.893 13 7.985c0-1.894-.861-2.984-2.685-2.984zm1.187.967h.844c1.112 0 1.621.686 1.621 2.04 0 1.353-.505 2.02-1.621 2.02h-.844z"/>
-              <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
-            </svg>
-          </a>
-
-        </div>
+        <a href="/assets/tour/<%= asset._id %>" class="btn btn-outline-secondary mt-2">Tour
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-badge-3d" viewBox="0 0 16 16">
+            <path d="M4.52 8.368h.664c.646 0 1.055.378 1.06.9.008.537-.427.919-1.086.919-.598-.004-1.037-.325-1.068-.756H3c.03.914.791 1.688 2.153 1.688 1.24 0 2.285-.66 2.272-1.798-.013-.953-.747-1.38-1.292-1.432v-.062c.44-.07 1.125-.527 1.108-1.375-.013-.906-.8-1.57-2.053-1.565-1.31.005-2.043.734-2.074 1.67h1.103c.022-.391.383-.751.936-.751.532 0 .928.33.928.813.004.479-.383.835-.928.835h-.632v.914zm3.606-3.367V11h2.189C12.125 11 13 9.893 13 7.985c0-1.894-.861-2.984-2.685-2.984zm1.187.967h.844c1.112 0 1.621.686 1.621 2.04 0 1.353-.505 2.02-1.621 2.02h-.844z"/>
+            <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+          </svg>
+        </a>
       </div>
     </div>
-  <% }) %>
+  </div>
+<% }) %>
+
+  
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <script>
 
     //Donation submission
     $(document).ready(function () {
-      $('#paymentForm').on('submit', function (e) {
+      $('.paymentForm').on('submit', function (e) {
         e.preventDefault(); // Prevent default form submission
 
         // Collect form data
         var formData = {
-          Name: $('#Name').val(),
-          Amount: $('#amount').val(),
-          MOP: $('#PaymentMethod').val(),
-          Phone: $('#Phone').val()
+          Name: $('.name').val(),
+          Amount: $('.amount').val(),
+          MOP: $('.paymentMethod').val(),
+          Phone: $('phone').val()
         };
 
         // AJAX POST to /donation
@@ -141,8 +146,8 @@
           data: JSON.stringify(formData),
           contentType: 'application/json',
           success: function (response) {
-            $('#paymentForm')[0].reset();
-            $('#paymentModal').modal('hide'); // Hide the modal
+            $('.paymentForm')[0].reset();
+            $('.paymentModal').modal('hide'); // Hide the modal
             Swal.fire({
               title: 'Success!',
               text: 'Your donation was sent, thanks for the support.',
@@ -154,6 +159,7 @@
             
           },
           error: function (xhr) {
+            $('.paymentForm')[0].reset();
             Swal.fire('Error!', 'Donation failed. Please try again.', 'error');
           }
         });
