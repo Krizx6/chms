@@ -211,6 +211,9 @@ exports.getAssetTour = async (req, res)=>{
   res.render('asset-tour', {asset, title, user: req.user});
 };
 
+exports.getCommunity =(req, res)=>{
+  res.render("community_form", {title:"community form", msg:"", user: "Community" ||req.user });
+}
 
 
 

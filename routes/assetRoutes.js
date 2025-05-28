@@ -43,6 +43,7 @@ router.get('/update/:id',assetController.getAssetUdate);
 router.post('/update/:id',assetController.updateAsset);
 // route
 router.get('/suggest', assetController.suggestAssets);
+router.get("/community", assetController.getCommunity);
 
 // Get assets (with search and sorting)
 router.get('/search?', authMiddleware, assetController.searchAssets);
