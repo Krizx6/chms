@@ -1,6 +1,18 @@
 const path = require('path');
 const fs = require('fs');
 const Asset = require('../models/Asset');
+const comment = require('../models/comments');
+
+
+exports.addacomment = async (req, res) => {
+  const{commentMsg} = req.body;
+
+  await comment.create({
+    commentMsg,
+    user: req.User
+  })
+  return;
+}
 
 exports.getAssets = async (req, res) => {
   const assets = await Asset.find().sort({ createdAt: -1 });
@@ -122,10 +134,11 @@ exports.getSingleAsset = async (req, res, next) => {
   const asset = await Asset.findById(req.params.id);
   const title = 'asset details';
   const user = req.user;
+  const comments = await comment.find();
 
   if (!asset) return res.status(404).send('Asset not found');
   
-  res.render('asset-details', { asset, title, user});
+  res.render('asset-details', { asset, title, user, comments});
 };
 
 
@@ -212,8 +225,72 @@ exports.getAssetTour = async (req, res)=>{
 };
 
 exports.getCommunity =(req, res)=>{
-  res.render("community_form", {title:"community form", msg:"", user: "Community" ||req.user });
+  req.user = "community";
+  res.render("community_form", {title:"community form", msg:"", user: req.user });
 }
+
+//community contribution
+exports.communityAddAsset = async (req, res) => {
+  if (req.fileValidationError) {
+    return res.render('add-asset',{title: "kk", user: req.user, msg: req.fileValidationError})
+  } 
+  // Helper: Save base64 image as file
+  function saveBase64Image(dataUrl) {
+    const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
+    const ext = matches[1].split('/')[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+
+    const uploadDir = path.join(__dirname, '..', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir); // Create the directory if it doesn't exist
+    }
+
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const filepath = path.join('uploads', filename);
+    fs.writeFileSync(filepath, buffer);
+    return `/uploads/${filename}`;
+  }
+
+   //get incoming form data
+   const { name, category, description, location, long, lat } = req.body;
+
+  // Parse and replace base64 images
+  const imgRegex = /<img[^>]+src="data:(image\/[^;]+);base64,([^"]+)"[^>]*>/g;
+  let images = [];
+  let updatedContent = description.replace(imgRegex, (match, mimeType, base64) => {
+    const dataUrl = `data:${mimeType};base64,${base64}`;
+    const filePath = saveBase64Image(dataUrl);
+    images.push(filePath);
+    return `<img src="${filePath}" />`;
+  });
+
+  //save form data to db
+  if(req.file){
+    await Asset.create({ 
+    name, 
+    category, 
+    description: updatedContent, 
+    location, 
+    filepath :`/uploads/models/${req.file.filename}`,
+    lat,
+    long
+  });
+  }else{
+    await Asset.create({ 
+    name, 
+    category, 
+    description: updatedContent, 
+    location, 
+    filepath: "",
+    lat,
+    long
+  });
+  }
+  
+  
+  req.flash('success_msg', 'sumitted successfully!');
+  res.redirect('/');
+};
 
 
 

@@ -15,7 +15,7 @@
       <%if(user.role == "user"){%>
         <form id="userComment">
           <div class="input-group my-3">
-          <input type="text" class="form-control" id="comment" placeholder="Leave a comment" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+          <input type="text" class="form-control"  id="comment" placeholder="Leave a comment" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="submit" id="send">Send
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
@@ -27,6 +27,27 @@
         </form>
         
       <%}%>
+      <!-- comments -->
+       <div class="accordion mt-4" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                      aria-expanded="false" aria-controls="collapseOne">
+                <strong>Comments:</strong>
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <% comments.forEach(comm => { %>
+                  <p class="description"><%- comm.commentMsg %></p>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--asset details desciption-->
       <div class="accordion mt-4" id="accordionExample">
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -55,13 +76,13 @@
 
         // Collect form data
         var formData = {
-          Name: $('#comment').val()
+          commentMsg: $('#comment').val()
         };
 
         // AJAX POST to /donation
         $.ajax({
           type: 'POST',
-          url: '/donation',
+          url: '/assets/comment/',
           data: JSON.stringify(formData),
           contentType: 'application/json',
           success: function (response) {
@@ -76,7 +97,7 @@
             
           },
           error: function (xhr) {
-            Swal.fire('Error!', 'comment problem', 'error');
+            Swal.fire('Error!', 'comment problem', 'error' xhr);
           }
         });
       });

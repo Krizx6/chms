@@ -54,6 +54,9 @@ router.get('/add',authMiddleware, assetController.getAddAssetPage);
 // Handle asset addition
 router.post('/add',authMiddleware,upload.single("3d_file"), assetController.addAsset);
 
+// Handle community asset addition
+router.post('/community',upload.single("3d_file"), assetController.communityAddAsset);
+
 // Get all assets (with search and sorting)
 router.get('/',authMiddleware, assetController.getAssets);
 
@@ -68,6 +71,9 @@ router.get('/delete/:id', assetController.deleteAsset);
 
 //tour asset
 router.get('/tour/:id', assetController.getAssetTour);
+
+//commment
+router.post('/comment/', assetController.addacomment);
 
 
 
