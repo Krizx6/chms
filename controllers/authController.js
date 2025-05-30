@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
   }
   //Redirect based on role
   try{
-
+    
     if (user.role === 'admin') {
     passport.authenticate('local', {
       successRedirect: '/admin/dashboard',
@@ -60,12 +60,13 @@ exports.login = async (req, res, next) => {
       failureFlash: true,
     })(req, res, next);
     req.flash('success_msg', 'Login successful');
-  }else {
+    }else {
     passport.authenticate('local', {
       successRedirect: '/assets',
       failureRedirect: '/auth/login',
       failureFlash: true,
     })(req, res, next);
+
   }
   }catch(error){
     console.log(error)
