@@ -8,8 +8,7 @@ exports.addacomment = async (req, res) => {
   const{commentMsg} = req.body;
 
   await comment.create({
-    commentMsg,
-    user: req.User
+    commentMsg
   })
   return;
 }
@@ -88,8 +87,66 @@ exports.getAssetUdate = async(req, res)=>{
 }
 
 exports.updateAsset = async (req, res) => {
-  const { name, category, description, location } = req.body;
-  await Asset.findByIdAndUpdate(req.params.id, { name, category, description, location });
+const id = req.params.id;
+
+if (req.fileValidationError) {
+    return res.render('update-asset',{title: "kk", user: req.user, msg: req.fileValidationError})
+  } 
+  // Helper: Save base64 image as file
+  function saveBase64Image(dataUrl) {
+    const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
+    const ext = matches[1].split('/')[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+
+    const uploadDir = path.join(__dirname, '..', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir); // Create the directory if it doesn't exist
+    }
+
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const filepath = path.join('uploads', filename);
+    fs.writeFileSync(filepath, buffer);
+    return `/uploads/${filename}`;
+  }
+
+   //get incoming form data
+   const { name, category, description, location, long, lat } = req.body;
+
+   const safeDescription = description || req.body.description;
+
+  // Parse and replace base64 images
+  const imgRegex = /<img[^>]+src="data:(image\/[^;]+);base64,([^"]+)"[^>]*>/g;
+  let images = [];
+  let updatedContent = safeDescription.replace(imgRegex, (match, mimeType, base64) => {
+    const dataUrl = `data:${mimeType};base64,${base64}`;
+    const filePath = saveBase64Image(dataUrl);
+    images.push(filePath);
+    return `<img src="${filePath}" />`;
+  });
+
+  //save form data to db
+  if(req.file){
+    await Asset.findByIdAndUpdate(id,{ 
+    name, 
+    category, 
+    description: updatedContent, 
+    location, 
+    filepath :`/uploads/models/${req.file.filename}`,
+    lat,
+    long
+  });
+  }else{
+    await Asset.findByIdAndUpdate(id,{ 
+    name, 
+    category, 
+    description: updatedContent, 
+    location, 
+    filepath: "",
+    lat,
+    long
+    });
+  }
+  console.log(req.body.name);
   
   req.flash('success_msg', 'Asset updated successfully!');
   res.redirect('/assets');
@@ -284,7 +341,7 @@ exports.communityAddAsset = async (req, res) => {
     filepath: "",
     lat,
     long
-  });
+    });
   }
   
   

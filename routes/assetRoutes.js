@@ -64,7 +64,7 @@ router.get('/',authMiddleware, assetController.getAssets);
 router.get('/:id',authMiddleware, assetController.getSingleAsset);
 
 // Update asset
-router.post('/edit/:id', assetController.updateAsset);
+router.post('/edit/:id',authMiddleware, assetController.updateAsset);
 
 // Delete asset
 router.get('/delete/:id', assetController.deleteAsset);
@@ -74,8 +74,6 @@ router.get('/tour/:id', assetController.getAssetTour);
 
 //commment
 router.post('/comment/', assetController.addacomment);
-
-
 
 
 
