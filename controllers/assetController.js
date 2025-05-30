@@ -2,15 +2,35 @@ const path = require('path');
 const fs = require('fs');
 const Asset = require('../models/Asset');
 const comment = require('../models/comments');
+const donations = require('../models/Donations');
 
+exports.donate = async (req, res)=>{
+  try {
+    const { Name, Amount, MOP, Phone } = req.body;
+
+    await donations.create({ Name, Amount, MOP, Phone });
+    res.redirect("/assets");
+
+  } catch (error) {
+    console.error('Donation error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+
+
+  
+  // await donations.create(req.body);
+  // res.redirect("/assets");
+
+}
 
 exports.addacomment = async (req, res) => {
   const{commentMsg} = req.body;
 
   await comment.create({
-    commentMsg
-  })
-  return;
+    commentMsg,
+    user: req.user.name
+  });
+  return res.redirect('/assets/');
 }
 
 exports.getAssets = async (req, res) => {

@@ -11,10 +11,13 @@ const router = express.Router();
 // Change Password
 router.post('/change-password',validation.changePass,userController.changePassword);
 
-module.exports = router;
+
 
 // load users page from admin dashboard
 router.get('/allusers',authMiddleware, userController.getUsers);
 
 router.post('/update-user-role/:id', userController.updateUserRole);
+
+
+module.exports = router;
 

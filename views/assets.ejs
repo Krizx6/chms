@@ -52,7 +52,7 @@
           <form id="paymentForm-<%= asset._id %>" class="paymentForm">
             <div class="mb-3">
               <label for="Name-<%= asset._id %>" class="form-label">Name</label>
-              <input type="text" name="name" class="form-control name" id="Name-<%= asset._id %>" required>
+              <input type="text" name="name" class="form-control name" id="Name-<%= asset._id %>" minlength="3" required>
             </div>
             <div class="mb-3">
               <label for="amount-<%= asset._id %>" class="form-label">Amount</label>
@@ -61,11 +61,11 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="PaymentMethod-<%= asset._id %>" class="form-label">Payment Method</label>
-                <input type="text" name="paymentMethod" class="form-control paymentMethod" id="PaymentMethod-<%= asset._id %>" placeholder="MTN or Airtel">
+                <input type="text" name="paymentMethod" class="form-control paymentMethod" id="PaymentMethod-<%= asset._id %>" placeholder="MTN or Airtel" minlength="10" required>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="Phone-<%= asset._id %>" class="form-label">Phone Number</label>
-                <input type="number" name="phone" class="form-control phone" id="Phone-<%= asset._id %>" required>
+                <input type="tel" name="phone" class="form-control phone" id="Phone-<%= asset._id %>" required>
               </div>
             </div>
             <button type="submit" class="btn btn-success w-100">Donate</button>
@@ -163,17 +163,16 @@
           Name: $('.name').val(),
           Amount: $('.amount').val(),
           MOP: $('.paymentMethod').val(),
-          Phone: $('phone').val()
+          Phone: $('.phone').val()
         };
 
         // AJAX POST to /donation
         $.ajax({
           type: 'POST',
-          url: '/donation',
+          url: '/assets/donation',
           data: JSON.stringify(formData),
           contentType: 'application/json',
           success: function (response) {
-            $('.paymentForm')[0].reset();
             $('.paymentModal').modal('hide'); // Hide the modal
             Swal.fire({
               title: 'Success!',
@@ -182,6 +181,7 @@
               timer:2000,
               showConfirmButton: false,
             })
+            $('.paymentForm')[0].reset();
             console.log(response);
             
           },

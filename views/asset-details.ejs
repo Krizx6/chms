@@ -40,7 +40,7 @@
             <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <% comments.forEach(comm => { %>
-                  <p class="description"><%- comm.commentMsg %></p>
+                  <p class=""><span class="badge bg-dark"><%= comm.user %></span> <%= comm.commentMsg %> </p>
                 <% }) %>
               </div>
             </div>
@@ -92,12 +92,12 @@
               text: 'Thanks for the feedback.',
               timer:1000
               }).then(() => {
-              //location.reload(); // refresh the page
+              location.reload(); // refresh the page
             });
             
           },
           error: function (xhr) {
-            Swal.fire('Error!', 'comment problem', 'error' xhr);
+            Swal.fire('Error!', 'comment problem', 'error');
           }
         });
       });

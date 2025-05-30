@@ -67,13 +67,16 @@ router.get('/:id',authMiddleware, assetController.getSingleAsset);
 router.post('/edit/:id',authMiddleware, assetController.updateAsset);
 
 // Delete asset
-router.get('/delete/:id', assetController.deleteAsset);
+router.get('/delete/:id',authMiddleware, assetController.deleteAsset);
 
 //tour asset
-router.get('/tour/:id', assetController.getAssetTour);
+router.get('/tour/:id',authMiddleware, assetController.getAssetTour);
 
 //commment
-router.post('/comment/', assetController.addacomment);
+router.post('/comment/',authMiddleware, assetController.addacomment);
+
+//donation
+router.post('/donation',authMiddleware, assetController.donate);
 
 
 
