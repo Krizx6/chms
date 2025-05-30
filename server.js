@@ -27,6 +27,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 //middleware
 app.use('/public', express.static('public'));
+app.use('/uploads', express.static('uploads'));
+
 app.use(express.json());
 //app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

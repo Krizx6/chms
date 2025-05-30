@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const campaignSchema = new mongoose.Schema({
-  title: String,
-  messege: String,
+  campaignTitle: String,
+  campaignMessege: String,
 });
-module.exports = mongoose.model('Campaign', campaignSchemaSchema);
+module.exports = mongoose.model('Campaign', campaignSchema);

@@ -1,6 +1,7 @@
 const express = require('express');
 const Asset = require('../models/Asset');
 const User = require('../models/User');
+const camp = require("../models/Campaigns");
 
 const authMiddleware = require('../config/auth');
 
@@ -17,6 +18,7 @@ router.get('/',authMiddleware, async (req, res) => {
   const assetCount = await Asset.countDocuments();
   const userCount = await User.countDocuments();
   const recentAssets = await Asset.find().sort({ createdAt: -1 }).limit(5);
+  const compaigns = await camp.find();
 
   res.render('dashboard', { 
     assets: assetCount, 
@@ -24,7 +26,8 @@ router.get('/',authMiddleware, async (req, res) => {
     recentAssets, 
     title,
     user,
-    msg: req.flash('success_msg')
+    msg: req.flash('success_msg'),
+    
   });
 });
 
