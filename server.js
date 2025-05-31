@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 //middleware
-app.use('/public', express.static('public'));
+//app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(express.json());

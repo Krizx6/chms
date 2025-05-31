@@ -3,6 +3,8 @@ const fs = require('fs');
 const Asset = require('../models/Asset');
 const comment = require('../models/comments');
 const donations = require('../models/Donations');
+const { title } = require('process');
+
 
 exports.donate = async (req, res)=>{
   try {
@@ -15,13 +17,15 @@ exports.donate = async (req, res)=>{
     console.error('Donation error:', error);
     res.status(500).json({ error: 'Server error' });
   }
-
-
-  
   // await donations.create(req.body);
   // res.redirect("/assets");
-
 }
+
+exports.getDonationPage = async (req, res)=>{
+  const allDonations = await donations.find();
+
+  res.render('donation', {title:'donation page', user:req .user, allDonations});
+};
 
 exports.addacomment = async (req, res) => {
   const{commentMsg} = req.body;

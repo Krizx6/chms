@@ -1,0 +1,44 @@
+<%- include('./layouts/layout') -%>
+
+<div class="container-fluid ">
+
+<table id="myTable" class="display w-100" >
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Phone number</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <% allDonations.forEach(donation => {  %>
+
+            <!-- Table Row -->
+            <tr>
+                <td><%=donation.Name%></td>
+                <td><%=donation.Amount%></td>
+                <td><%=donation.MOP%></td>
+                <td><%=donation.Phone%></td>
+            </tr>
+        <% }) %>
+
+    </tbody>
+</table>
+</div>
+
+<script>
+    $('#myTable').DataTable({
+        responsive: true,
+        fixedHeader: true,
+        fixedColumns: true,
+        layout: {
+            topStart: {
+                buttons: [
+                    'copy', 'pdf'
+                ]
+            }
+        }
+    });
+</script>

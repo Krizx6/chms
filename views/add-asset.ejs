@@ -2,6 +2,7 @@
 <div class="progress mb-3" style="height: 25px;">
 
 </div>
+
 <div class="container mt-4">
   <h2 class="text-center">Add New Asset</h2>
 
@@ -40,6 +41,16 @@
       <input type="text" class="form-control" id="location" name="location" required>
     </div>
 
+    <!-- arcGIS map for pointing cordinates -->
+     <a id="cord" class="btn btn-outline-primary">add cordinates</a>
+      <div id="viewDiv" class=""></div>
+      <div id="info">
+        click to add cordinate
+        <span id="longitude">32.87292</span>
+        <span>,</span>
+        <span id="latitude">2.22657</span>
+      </div>
+
     <div class="mb-3 d-inline">
       <label for="lat" class="form-label">Latitude</label>
       <input type="number" class="form-control" id="lat" name="lat" step="any">
@@ -58,11 +69,20 @@
   </form>
 </div>
 
+<!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+  <!-- arcGIS assets -->
+ <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.26/"></script>
+
 <script>
-  function detectInput (){
-    const category = $("#category");
-    console.log(category.value);
-  }
+  $("#cord").toggle(
+    function(){
+      $(this).show();
+    },
+    function(){
+      $(this).hide();
+    },
+  );
 
   $('#description').summernote({
     placeholder: 'Type any relevant information here, drag and drop images and use the video icon to add video urls',
@@ -78,6 +98,32 @@
       ['view', ['fullscreen', 'codeview', 'help']]
     ]
   });
+//arcGIS cordinate picker
+require(["esri/Map", "esri/views/MapView"], (Map, MapView) => {
+  const map = new Map({
+    basemap: "topo-vector"
+  });
+  const view = new MapView({
+    container: "viewDiv",
+    map: map,
+    center: [32.87292, 2.22657],
+    zoom: 6
+  });
+  view.when(() => {
+    view.ui.add("info", "top-right");
+    view.on("click", (event) => {
+      const longitude = event.mapPoint.longitude.toFixed(5);
+      const latitude = event.mapPoint.latitude.toFixed(5);
+      document.getElementById("longitude").innerText = longitude;
+      document.getElementById("latitude").innerText = latitude;
+
+      document.getElementById("long").value = longitude;
+      document.getElementById("lat").value = latitude;
+    });
+  });
+});
+
+
 
   //ajax form submit
   // $('#btnSubmit').click((e)=>{

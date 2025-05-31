@@ -16,16 +16,17 @@
   src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js">
 </script>
 
+
+
 <div class="container ">
   <p class="">Virtual touring <%= asset.name %></p>
-  <% if (asset.filepath ) { %>
-    <% if (asset.category=== "other") { %>
+    <% if (asset.category && asset.filepath) { %>
       <div class="h-50">
         <model-viewer style="height: 500px; margin-top: 5px;" class="col-12 mx-auto "  
         alt="" 
         src="<%= asset.filepath %>" 
         ar environment-image="" 
-        poster="../uploads/download.jpg" 
+        poster="" 
         shadow-intensity="1" 
         camera-controls 
         touch-action="pan-y">
@@ -33,9 +34,8 @@
         </model-viewer>
       </div>
     <% }%>
-  <%}%>
 
-  <%if(asset.category=== "site" && asset.long && asset.lat){%>
+  <%if(asset.category && asset.long && asset.lat){%>
     <div style="height: 500px; margin-top: 5px;">
       <arcgis-scene basemap="hybrid"
                     camera-position="<%= asset.long %>, <%= asset.lat %>, 1020" 

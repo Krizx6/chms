@@ -38,6 +38,9 @@ upload = multer({
     }
 })
 
+//donation
+router.post('/donation',authMiddleware, assetController.donate);
+router.get('/donation', assetController.getDonationPage);
 
 router.get('/update/:id',assetController.getAssetUdate);
 router.post('/update/:id',assetController.updateAsset);
@@ -48,10 +51,8 @@ router.get("/community", assetController.getCommunity);
 // Get assets (with search and sorting)
 router.get('/search?', authMiddleware, assetController.searchAssets);
 
-// Show add asset page
+// add asset
 router.get('/add',authMiddleware, assetController.getAddAssetPage);
-
-// Handle asset addition
 router.post('/add',authMiddleware,upload.single("3d_file"), assetController.addAsset);
 
 // Handle community asset addition
@@ -75,9 +76,10 @@ router.get('/tour/:id',authMiddleware, assetController.getAssetTour);
 //commment
 router.post('/comment/',authMiddleware, assetController.addacomment);
 
-//donation
-router.post('/donation',authMiddleware, assetController.donate);
 
 
 
-module.exports = router;
+
+
+
+module.exports = router; 
